@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- res/layout/order_item_ar.xml -->
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    app:cardCornerRadius="8dp"
+    app:cardElevation="4dp"
+    android:layout_margin="8dp"
+    android:layoutDirection="rtl"
+    android:layout_height="wrap_content"
+    android:layout_width="match_parent">
+
+    <LinearLayout
+        android:padding="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        >
+
+        <TextView
+            android:id="@+id/title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="طلبية جديدة"
+            android:textSize="25sp"
+            android:gravity="center"
+            android:textColor="@color/black"
+            android:fontFamily="@font/hacen_beirut_bight"
+            android:textStyle="bold"
+            android:layout_marginTop="4dp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:background="@color/profileordercolor"
+            android:layout_marginBottom="10dp"
+            android:padding="8dp">
+
+            <ImageView
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_marginLeft="10dp"
+                android:src="@drawable/profile" />
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/customer_name_onloading"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="مطعم الحرية"
+                    android:textColor="@color/black"
+                    android:fontFamily="@font/hacen_beirut_bight"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/order_date_onloading"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="اليوم الساعة 12:33 ص"
+                    android:textSize="12sp"
+                    android:fontFamily="@font/hacen_beirut_bight"
+                    android:textColor="@android:color/black" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:gravity="start">
+
+                <TextView
+                    android:id="@+id/order_id_onloading"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="رقم الطلب: 348"
+                    android:textSize="12sp"
+
+                    android:fontFamily="@font/hacen_beirut_bight"
+                    android:textColor="@android:color/black" />
+
+                <TextView
+                    android:id="@+id/order_total_onloading"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="سعر التوصيل : 42.00 دج"
+                    android:textSize="16sp"
+                    android:textColor="@color/black"
+                    android:fontFamily="@font/hacen_beirut_bight"
+                    android:textStyle="bold"
+                    android:layout_marginTop="4dp" />
+            </LinearLayout>
+        </LinearLayout>
+
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginRight="10dp"
+            android:layout_marginLeft="10dp">
+
+
+
+
+            <Button
+                android:id="@+id/accept_order"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@drawable/accept_button"
+                android:fontFamily="@font/hacen_beirut_bight"
+                android:textColor="@color/white"
+                android:textSize="20dp"
+                android:text="قبول الطلب" />
+
+            <Button
+                android:id="@+id/cancel_order"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:textColor="@color/white"
+                android:textSize="20dp"
+                android:text="رفض الطلب"
+                android:background="@drawable/remove_button"
+                android:fontFamily="@font/hacen_beirut_bight"
+                android:layout_marginStart="8dp" />
+        </LinearLayout>
+    </LinearLayout>
+</androidx.cardview.widget.CardView>
