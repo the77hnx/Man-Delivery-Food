@@ -24,6 +24,8 @@ public class OrderInDeliveryActivity extends AppCompatActivity {
     private LinearLayout deliveryDoneLayout;
     private LinearLayout otpSection;
     private EditText otpInput1 , otpInput2;
+    private boolean isOrderCancelled = false; // Flag to track button state
+
     private Button cancelOrderButton;
     private Button submitOtpButton;
     private Button DetailedOrderBtn;
@@ -86,14 +88,19 @@ public class OrderInDeliveryActivity extends AppCompatActivity {
 
 
         // Set onClickListener for cancelOrderButton
-        cancelOrderButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        cancelOrderButton.setOnClickListener(v -> {
+            if (!isOrderCancelled) {
+                // Change the text and set flag to true
+                cancelOrderButton.setText("تم التوصيل");
+                isOrderCancelled = true;
+            } else {
                 // Hide delivery_done layout and show otp_section layout
                 deliveryDoneLayout.setVisibility(View.GONE);
                 otpSection.setVisibility(View.VISIBLE);
+                isOrderCancelled = false; // Reset the flag if needed
             }
         });
+
 
         // Set onClickListener for submitOtpButton
         submitOtpButton.setOnClickListener(new View.OnClickListener() {
