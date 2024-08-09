@@ -12,6 +12,14 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+import com.example.man_delivery_food.Adapter.ItemDetailsAdpter;
+import com.example.man_delivery_food.Model.FoodItem;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class OrderDetailsActivity extends AppCompatActivity {
 
@@ -21,16 +29,31 @@ public class OrderDetailsActivity extends AppCompatActivity {
     private String restaurantAddress = "حي فاتح نوفمبر لبامة البياضة"; // Replace with actual address
     private String customerAddress = "حي فاتح نوفمبر لبامة البياضة";   // Replace with actual address
 
+    private RecyclerView recyclerView;
+    private ItemDetailsAdpter adapter;
+    private List<FoodItem> itemList;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_order_details);
 
-        Button callResBtn = findViewById(R.id.call_res_btn);
-        Button directionResBtn = findViewById(R.id.direction_res_btn);
         Button callCusBtn = findViewById(R.id.call_user_btn);
         Button directionCusBtn = findViewById(R.id.direction_user_btn);
         Button DeliveryDone = findViewById(R.id.delivery_order_done);
+
+        // Initialize RecyclerView
+        recyclerView = findViewById(R.id.recyclerView); // Your RecyclerView ID
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+        // Initialize item list and adapter
+        itemList = new ArrayList<>();
+        adapter = new ItemDetailsAdpter(this, itemList);
+        recyclerView.setAdapter(adapter);
+
+        // Populate the item list
+        populateItems();
 
         DeliveryDone.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -40,12 +63,7 @@ public class OrderDetailsActivity extends AppCompatActivity {
             }
         });
 
-        callResBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                makePhoneCall(restaurantPhoneNumber);
-            }
-        });
+
 
         callCusBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -54,12 +72,7 @@ public class OrderDetailsActivity extends AppCompatActivity {
             }
         });
 
-        directionResBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                openMapForDirections(36.7201600, 3.2167000, restaurantAddress);  // Use actual coordinates for the restaurant
-            }
-        });
+
 
         directionCusBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -113,5 +126,15 @@ public class OrderDetailsActivity extends AppCompatActivity {
                 Toast.makeText(this, "Permission denied to make a call", Toast.LENGTH_SHORT).show();
             }
         }
+    }
+
+    private void populateItems() {
+        itemList.add(new FoodItem("Item 1", 10000.00,10, R.drawable.pizza));
+        itemList.add(new FoodItem("Item 2", 100.00,10, R.drawable.pizza));
+        itemList.add(new FoodItem("Item 3", 10.00,10, R.drawable.pizza));
+        // Add more items as needed
+
+        // Notify adapter of data change
+        adapter.notifyDataSetChanged();
     }
 }
