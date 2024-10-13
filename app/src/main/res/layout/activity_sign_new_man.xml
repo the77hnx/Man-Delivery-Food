@@ -34,7 +34,7 @@
             android:padding="16dp">
 
             <Button
-                android:id="@+id/selectImagevehButton"
+                android:id="@+id/selectImageresButton"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_centerHorizontal="true"
@@ -42,18 +42,65 @@
                 android:layout_marginBottom="10dp"
                 android:background="@drawable/uploadimage_border"
                 android:fontFamily="@font/hacen_beirut_bight"
-                android:text="اختيار صورة المركبة"
+                android:text="اختيار صورة للمركبة"
                 android:textColor="@color/black"
                 android:textStyle="bold" />
 
             <ImageView
-                android:id="@+id/selectedImageVeh"
+                android:id="@+id/selectedImageRes"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:visibility="gone"
                 android:layout_marginTop="10dp"
                 android:layout_marginBottom="10dp" />
-
+            <EditText
+                android:id="@+id/etNameMag"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:background="@drawable/field_border"
+                android:fontFamily="@font/hacen_beirut_bight"
+                android:gravity="right"
+                android:hint="اسم صاحب المركبة"
+                android:inputType="textPersonName"
+                android:minHeight="48dp"
+                android:padding="10dp" />
+            <EditText
+                android:id="@+id/etemailsign"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:background="@drawable/field_border"
+                android:fontFamily="@font/hacen_beirut_bight"
+                android:gravity="right"
+                android:hint="البريد الالكتروني"
+                android:inputType="textEmailAddress"
+                android:minHeight="48dp"
+                android:padding="10dp" />
+            <EditText
+                android:id="@+id/etPasswordsign"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:background="@drawable/field_border"
+                android:fontFamily="@font/hacen_beirut_bight"
+                android:gravity="right"
+                android:hint="كلمة السر"
+                android:inputType="textPassword"
+                android:minHeight="48dp"
+                android:padding="10dp" />
+            <EditText
+                android:id="@+id/etconfirmPassword"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:background="@drawable/field_border"
+                android:fontFamily="@font/hacen_beirut_bight"
+                android:gravity="right"
+                android:hint="تكرار كلمة السر"
+                android:inputType="textPassword"
+                android:minHeight="48dp"
+                android:padding="10dp" />
             <EditText
                 android:id="@+id/etnumber"
                 android:layout_width="match_parent"
@@ -63,6 +110,7 @@
                 android:fontFamily="@font/hacen_beirut_bight"
                 android:gravity="right"
                 android:hint="الهاتف"
+                android:maxLength="10"
                 android:inputType="number"
                 android:minHeight="48dp"
                 android:padding="10dp" />
@@ -75,26 +123,13 @@
                 android:background="@drawable/field_border"
                 android:fontFamily="@font/hacen_beirut_bight"
                 android:gravity="right"
-                android:hint="اسم صاحب المركبة"
+                android:hint="اسم  المركبة"
                 android:inputType="textPersonName"
                 android:minHeight="48dp"
                 android:padding="10dp" />
 
             <EditText
-                android:id="@+id/etDescriptionveh"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="10dp"
-                android:background="@drawable/field_border"
-                android:fontFamily="@font/hacen_beirut_bight"
-                android:gravity="right"
-                android:hint="وصف المركبة"
-                android:inputType="textMultiLine"
-                android:minHeight="48dp"
-                android:padding="10dp" />
-
-            <EditText
-                android:id="@+id/etplacesveh"
+                android:id="@+id/etplacesres"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="10dp"
@@ -102,23 +137,37 @@
                 android:fontFamily="@font/hacen_beirut_bight"
                 android:gravity="right"
                 android:hint="العنوان (بلدية/حي)"
-                android:inputType="text"
+                android:inputType="textLongMessage"
                 android:minHeight="48dp"
                 android:padding="10dp" />
 
-<!--            <Button-->
-<!--                android:id="@+id/GPSButton"-->
-<!--                android:layout_width="match_parent"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:layout_centerHorizontal="true"-->
-<!--                android:layout_marginBottom="10dp"-->
-<!--                android:background="@drawable/uploadimage_border"-->
-<!--                android:fontFamily="@font/hacen_beirut_bight"-->
-<!--                android:text="تحديد الموقع GPS"-->
-<!--                android:textColor="@color/black"-->
-<!--                android:textStyle="bold" />-->
+            <EditText
+                android:id="@+id/etN0Enrg"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:background="@drawable/field_border"
+                android:fontFamily="@font/hacen_beirut_bight"
+                android:gravity="right"
+                android:hint="رقم المركبة"
+                android:inputType="textPersonName"
+                android:minHeight="48dp"
+                android:padding="10dp" />
+            <EditText
+                android:id="@+id/etIdNational"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:background="@drawable/field_border"
+                android:fontFamily="@font/hacen_beirut_bight"
+                android:gravity="right"
+                android:hint="رقم بطاقة التعريف الوطنية"
+                android:inputType="textPersonName"
+                android:minHeight="48dp"
+                android:padding="10dp" />
+
             <ImageView
-                android:id="@+id/selectedVehID"
+                android:id="@+id/selectedResID"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:visibility="gone"
@@ -126,38 +175,7 @@
                 android:layout_marginBottom="10dp" />
 
             <Button
-                android:id="@+id/VehIDButton"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_centerHorizontal="true"
-                android:layout_marginBottom="10dp"
-                android:background="@drawable/uploadimage_border"
-                android:fontFamily="@font/hacen_beirut_bight"
-                android:text="ارفاق نسخة من وثائق السيارة"
-                android:textColor="@color/black"
-                android:textStyle="bold" />
-
-            <Button
-                android:id="@+id/CardIDButton"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_centerHorizontal="true"
-                android:layout_marginBottom="10dp"
-                android:background="@drawable/uploadimage_border"
-                android:fontFamily="@font/hacen_beirut_bight"
-                android:text="ارفاق نسخة من بطاقة التعريف"
-                android:textColor="@color/black"
-                android:textStyle="bold" />
-
-            <ImageView
-                android:id="@+id/selectedCardID"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:visibility="gone"
-                android:layout_marginTop="10dp"
-                android:layout_marginBottom="10dp" />
-            <Button
-                android:id="@+id/btnsendinfoveh"
+                android:id="@+id/btnsendinfores"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="10dp"

@@ -4,6 +4,7 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.TextView;
 
 import com.example.man_delivery_food.Model.Order;
@@ -19,10 +20,17 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
 
     private List<Order> orderList;
     private Context context;
+    private OnItemClickListener listener;
 
-    public OrderAdapter(Context context, List<Order> orderList) {
+    // Interface for click listener
+    public interface OnItemClickListener {
+        void onItemClick(Order order);
+    }
+    public OrderAdapter(Context context, List<Order> orderList, OnItemClickListener listener) {
         this.context = context;
         this.orderList = orderList;
+        this.listener = listener;
+
     }
 
     @NonNull
@@ -37,11 +45,18 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
         Order order = orderList.get(position);
 
         // Set data to views
-        holder.orderIdTextView.setText("رقم الطلب: " + order.getOrderId());
+        holder.orderIdTextView.setText("رقم الطلب : " + order.getOrderId());
         holder.numberItemsTextView.setText(order.getNumberOfItems() + " عناصر");
         holder.dateOrderTextView.setText(order.getOrderDate());
         holder.timeOrderTextView.setText(order.getOrderTime());
         holder.orderImageView.setImageResource(R.drawable.pizza); // Assuming you want to display a static image
+
+        // Set click listener for each item
+        holder.itemView.setOnClickListener(v -> {
+            if (listener != null) {
+                listener.onItemClick(order);
+            }
+        });
     }
 
     @Override
@@ -58,11 +73,11 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
 
         public OrderViewHolder(@NonNull View itemView) {
             super(itemView);
-            orderIdTextView = itemView.findViewById(R.id.order_id);
-            numberItemsTextView = itemView.findViewById(R.id.number_items);
+            orderIdTextView = itemView.findViewById(R.id.order_id_history);
+            numberItemsTextView = itemView.findViewById(R.id.number_items_history);
             dateOrderTextView = itemView.findViewById(R.id.date_order);
             timeOrderTextView = itemView.findViewById(R.id.time_order);
-            orderImageView = itemView.findViewById(R.id.shapeableImageView);
+            orderImageView = itemView.findViewById(R.id.shapeableImageView_history);
         }
     }
 }

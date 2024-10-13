@@ -208,7 +208,7 @@
 
 
             <Button
-                android:id="@+id/detailed_order_btn"
+                android:id="@+id/accept_order_not_btn"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -221,7 +221,7 @@
                 android:textSize="20dp" />
 
             <Button
-                android:id="@+id/direction_order_btn"
+                android:id="@+id/reject_order_not_btn"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"

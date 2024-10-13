@@ -7,14 +7,12 @@ public class FoodItem implements Parcelable {
     private String name;
     private double price;
     private int count;
-    private int imageResource;
 
 
-    public FoodItem(String name, double price, int count, int imageResource) {
+    public FoodItem(String name, double price, int count) {
         this.name = name;
         this.price = price;
         this.count = count;
-        this.imageResource = imageResource;
 
     }
 
@@ -47,20 +45,7 @@ public class FoodItem implements Parcelable {
     public int getCount() {
         return count;
     }
-    public int getImageResource() {
-        return imageResource;
-    }
 
-
-    public void incrementCount() {
-        this.count++;
-    }
-
-    public void decrementCount() {
-        if (this.count > 0) {
-            this.count--;
-        }
-    }
 
     @Override
     public int describeContents() {

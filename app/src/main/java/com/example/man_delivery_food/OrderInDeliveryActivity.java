@@ -2,50 +2,54 @@ package com.example.man_delivery_food;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.telecom.Call;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import com.example.man_delivery_food.Model.Order;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+
+import java.io.IOException;
+import java.util.List;
+
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.MediaType;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
 
 public class OrderInDeliveryActivity extends AppCompatActivity {
 
     private LinearLayout deliveryDoneLayout;
-    private LinearLayout otpSection;
-    private EditText otpInput1 , otpInput2;
+    private EditText otpInput1, otpInput2;
     private boolean isOrderCancelled = false; // Flag to track button state
 
-    private Button cancelOrderButton;
-    private Button submitOtpButton;
+    private Button Receive_Done_orderBTN;
     private Button DetailedOrderBtn;
+    private Button Return_Main;
+
+    private List<Order> order;
+    private TextView basket;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_order_in_delivery);
 
-        // Initialize Views
-        deliveryDoneLayout = findViewById(R.id.delivery_done);
-        otpSection = findViewById(R.id.otp_section);
-        otpInput1 = findViewById(R.id.inputcode1);
-        otpInput2 = findViewById(R.id.inputcode2);
-        cancelOrderButton = findViewById(R.id.cancel_order);
-        submitOtpButton = findViewById(R.id.submit_otp);
-        DetailedOrderBtn = findViewById(R.id.detailed_order_btn_od);
-
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavigationView_od);
-        bottomNavigationView.setSelectedItemId(R.id.navigation_following); // Change this based on the activity
 
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
@@ -55,13 +59,9 @@ public class OrderInDeliveryActivity extends AppCompatActivity {
                     // Navigate to ShopsActivity
                     startActivity(new Intent(OrderInDeliveryActivity.this, MainActivity.class));
                     return true;
-                } else if (itemId == R.id.navigation_following) {
-                    // Show toast indicating following action
-                    startActivity(new Intent(OrderInDeliveryActivity.this, OrderInDeliveryActivity.class));
-                    return true;
-                } else if (itemId == R.id.navigation_basket) {
+                }else if (itemId == R.id.navigation_basket) {
                     // Navigate to OrderSummaryActivity
-                    startActivity(new Intent(OrderInDeliveryActivity.this, OrderHistoryActivity.class));
+                    startActivity(new Intent(OrderInDeliveryActivity.this, OrderInDeliveryActivity.class));
                     return true;
                 } else if (itemId == R.id.navigation_profile) {
                     // Navigate to ProfileActivity
@@ -72,45 +72,123 @@ public class OrderInDeliveryActivity extends AppCompatActivity {
             }
         });
 
+        // Initialize Views
+        basket = findViewById(R.id.basket);
+        deliveryDoneLayout = findViewById(R.id.delivery_done);
+        Return_Main = findViewById(R.id.submit_otp);
+        Receive_Done_orderBTN = findViewById(R.id.Receive_Done_order);
+        DetailedOrderBtn = findViewById(R.id.detailed_order_btn_od);
+
         // Load the Map Fragment
         loadMapFragment();
 
-        DetailedOrderBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Hide delivery_done layout and show otp_section layout
-
-                Intent intent = new Intent(OrderInDeliveryActivity.this , OrderDetailsActivity.class);
+        DetailedOrderBtn.setOnClickListener(v -> {
+            // Hide delivery_done layout and show otp_section layout
+            if (order != null && !order.isEmpty()) {
+                String orderId = order.get(0).getOrderId(); // Get the ID of the first order
+                Intent intent = new Intent(OrderInDeliveryActivity.this, OrderDetailsActivity.class);
+                intent.putExtra("Id_Demandes", orderId);
                 startActivity(intent);
-
+            } else {
+                Toast.makeText(OrderInDeliveryActivity.this, "No orders available", Toast.LENGTH_SHORT).show();
             }
         });
 
+        String orderId = getIntent().getStringExtra("Id_Demandes");
 
-        // Set onClickListener for cancelOrderButton
-        cancelOrderButton.setOnClickListener(v -> {
+        if (orderId != null) {
+            try {
+                int parsedOrderId = Integer.parseInt(orderId); // Parse orderId to ensure it's a valid integer
+                basket.setText(String.valueOf(parsedOrderId)); // Display the parsed orderId
+            } catch (NumberFormatException e) {
+                Log.e("OrderInDeliveryActivity", "Invalid order ID format", e);
+                Toast.makeText(this, "Invalid order ID", Toast.LENGTH_SHORT).show();
+            }
+        }
+
+        // Set onClickListener for Receive_Done_orderBTN
+        Receive_Done_orderBTN.setOnClickListener(v -> {
             if (!isOrderCancelled) {
-                // Change the text and set flag to true
-                cancelOrderButton.setText("تم التوصيل");
+                // First click: Update orderId to 4
+                updateOrderStatus(Integer.parseInt(orderId), 4); // You might want to set statusId according to your status logic
+                Receive_Done_orderBTN.setText("تم التوصيل");
                 isOrderCancelled = true;
             } else {
-                // Hide delivery_done layout and show otp_section layout
+                // Second click: Update orderId to 6
+                updateOrderStatus(Integer.parseInt(orderId), 6); // Update statusId as needed
                 deliveryDoneLayout.setVisibility(View.GONE);
-                otpSection.setVisibility(View.VISIBLE);
+                Return_Main.setVisibility(View.VISIBLE);
+                Toast.makeText(OrderInDeliveryActivity.this, "نشكرك على اخلاصك في العمل", Toast.LENGTH_SHORT).show();
                 isOrderCancelled = false; // Reset the flag if needed
             }
         });
 
+        Return_Main.setOnClickListener(v -> {
+                Intent intent = new Intent(OrderInDeliveryActivity.this, MainActivity.class);
+                startActivity(intent);
+        });
+    }
 
-        // Set onClickListener for submitOtpButton
-        submitOtpButton.setOnClickListener(new View.OnClickListener() {
+    private void updateOrderStatus(int orderId, int statusId) {
+        OkHttpClient client = new OkHttpClient();
+
+        // Convert orderId and statusId to English numerals
+        String orderIdEnglish = convertArabicToEnglish(String.valueOf(orderId));
+        String statusIdEnglish = convertArabicToEnglish(String.valueOf(statusId));
+
+        // Create JSON string with English numerals
+        String json = String.format("{\"Id_Demandes\": %s, \"Id_Statut_Commande\": %s}", orderIdEnglish, statusIdEnglish);
+
+        Log.d("Request JSON", json); // Log the JSON payload
+
+        RequestBody body = RequestBody.create(json, MediaType.parse("application/json"));
+
+        Request request = new Request.Builder()
+                .url("http://192.168.1.33/fissa/Man_Delivery_Food/Update_Status_cmd.php")
+                .post(body)
+                .build();
+
+        client.newCall(request).enqueue(new Callback() {
             @Override
-            public void onClick(View v) {
-                // Validate OTP
-                validateOtp();
+            public void onResponse(Call call, Response response) throws IOException {
+                String responseData = response.body().string(); // Read response body
+                Log.d("Response Data", responseData); // Log the response for debugging
+
+                if (response.isSuccessful()) {
+                    runOnUiThread(() -> {
+                        Toast.makeText(OrderInDeliveryActivity.this, "Order status updated successfully", Toast.LENGTH_SHORT).show();
+                    });
+                } else {
+                    runOnUiThread(() -> {
+                        Toast.makeText(OrderInDeliveryActivity.this, "Error: " + responseData, Toast.LENGTH_SHORT).show();
+                    });
+                }
+            }
+
+            @Override
+            public void onFailure(Call call, IOException e) {
+                e.printStackTrace();
+                runOnUiThread(() -> {
+                    Toast.makeText(OrderInDeliveryActivity.this, "Failed to update order status", Toast.LENGTH_SHORT).show();
+                });
             }
         });
     }
+
+    // Method to convert Arabic numerals to English numerals
+    private String convertArabicToEnglish(String number) {
+        return number.replace('٠', '0')
+                .replace('١', '1')
+                .replace('٢', '2')
+                .replace('٣', '3')
+                .replace('٤', '4')
+                .replace('٥', '5')
+                .replace('٦', '6')
+                .replace('٧', '7')
+                .replace('٨', '8')
+                .replace('٩', '9');
+    }
+
 
     private void loadMapFragment() {
         SupportMapFragment mapFragment = new SupportMapFragment();
@@ -118,32 +196,5 @@ public class OrderInDeliveryActivity extends AppCompatActivity {
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.replace(R.id.map_container, mapFragment);
         fragmentTransaction.commit();
-    }
-
-    private void validateOtp() {
-        String enteredOtp1 = otpInput1.getText().toString().trim();
-        String enteredOtp2 = otpInput2.getText().toString().trim();
-
-
-        // Example OTP for validation
-        String correctOtp1 = "1";
-        String correctOtp2 = "2";
-
-
-        if (enteredOtp1.equals(correctOtp1) && enteredOtp2.equals(correctOtp2) ){
-            // OTP is correct
-            Toast.makeText(OrderInDeliveryActivity.this, "OTP is correct!", Toast.LENGTH_SHORT).show();
-
-            deliveryDoneLayout.setVisibility(View.VISIBLE);
-            otpSection.setVisibility(View.GONE);
-
-            Intent intent = new Intent(OrderInDeliveryActivity.this , MainActivity.class);
-            startActivity(intent);
-            // Perform the necessary action for a successful OTP validation
-            // For example, mark the order as completed or notify the user
-        } else {
-            // OTP is incorrect
-            Toast.makeText(OrderInDeliveryActivity.this, "Incorrect OTP. Please try again.", Toast.LENGTH_SHORT).show();
-        }
     }
 }

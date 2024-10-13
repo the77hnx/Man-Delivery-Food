@@ -31,7 +31,30 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:padding="16dp">
-
+            <TextView
+                android:id="@+id/name_pend"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="40dp"
+                android:fontFamily="@font/hacen_beirut_bight"
+                android:paddingRight="10dp"
+                android:text="اسم السائق"
+                android:textColor="@color/black"
+                android:textSize="30sp"
+                android:textStyle="bold" />
+            <TextView
+                android:id="@+id/NumberVeh_pend"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="40dp"
+                android:fontFamily="@font/hacen_beirut_bight"
+                android:paddingRight="10dp"
+                android:text="اسم السائق"
+                android:textColor="@color/black"
+                android:textSize="30sp"
+                android:textStyle="bold" />
             <TextView
                 android:id="@+id/status_pend"
                 android:layout_width="wrap_content"

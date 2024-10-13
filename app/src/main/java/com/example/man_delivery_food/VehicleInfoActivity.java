@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
@@ -12,7 +13,7 @@ import androidx.core.view.WindowInsetsCompat;
 
 public class VehicleInfoActivity extends AppCompatActivity {
 
-
+private TextView NameManDel, NumberVeh;
     private ImageView facebook, gmail, whatsapp;
 
     @Override
@@ -23,7 +24,14 @@ public class VehicleInfoActivity extends AppCompatActivity {
         facebook = findViewById(R.id.facebook);
         gmail = findViewById(R.id.gmail);
         whatsapp = findViewById(R.id.whatsapp);
+        NameManDel = findViewById(R.id.name_pend);
+        NumberVeh = findViewById(R.id.NumberVeh_pend);
+        Intent intent = getIntent();
+        String Name_Magasin = intent.getStringExtra("nom_livreur");
+        String Nmber_Enrigestrement = intent.getStringExtra("n_vehicule");
 
+        NameManDel.setText(Name_Magasin);
+        NumberVeh.setText(Nmber_Enrigestrement);
         // Apply window insets
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());

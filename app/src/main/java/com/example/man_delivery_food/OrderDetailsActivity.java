@@ -1,140 +1,276 @@
 package com.example.man_delivery_food;
 
-import android.Manifest;
+import static android.content.ContentValues.TAG;
+
 import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.man_delivery_food.Adapter.ItemDetailsAdpter;
 import com.example.man_delivery_food.Model.FoodItem;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.MediaType;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
+
 public class OrderDetailsActivity extends AppCompatActivity {
 
-    private static final int REQUEST_CALL_PERMISSION = 1;
-    private String restaurantPhoneNumber = "0123456789";  // Replace with actual phone number
-    private String customerPhoneNumber = "0123456789";    // Replace with actual phone number
-    private String restaurantAddress = "حي فاتح نوفمبر لبامة البياضة"; // Replace with actual address
-    private String customerAddress = "حي فاتح نوفمبر لبامة البياضة";   // Replace with actual address
-
-    private RecyclerView recyclerView;
-    private ItemDetailsAdpter adapter;
-    private List<FoodItem> itemList;
-
+    // View declarations
+    private TextView additionalInfoMagView;
+    private TextView restaurantNameView, restaurantLocationView, restaurantStatusView, restaurantRatingView, number_items;
+    private Button delivery_order_done;
+    private TextView CustomerNameView;
+    private RecyclerView itemRecyclerView;
+    private ItemDetailsAdpter itemAdapter;
+    private List<FoodItem> foodItemsList;
+    private OkHttpClient client;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        // Hide the title bar and make the activity full screen
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
+        this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_order_details);
 
-        Button callCusBtn = findViewById(R.id.call_user_btn);
-        Button directionCusBtn = findViewById(R.id.direction_user_btn);
-        Button DeliveryDone = findViewById(R.id.delivery_order_done);
+
+
+        BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavigationView_odet);
+        bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                int itemId = item.getItemId();
+                if (itemId == R.id.navigation_home) {
+                    // Navigate to ShopsActivity
+                    startActivity(new Intent(OrderDetailsActivity.this, MainActivity.class));
+                    return true;
+                }else if (itemId == R.id.navigation_basket) {
+                    // Navigate to OrderSummaryActivity
+                    startActivity(new Intent(OrderDetailsActivity.this, OrderInDeliveryActivity.class));
+                    return true;
+                } else if (itemId == R.id.navigation_profile) {
+                    // Navigate to ProfileActivity
+                    startActivity(new Intent(OrderDetailsActivity.this, EditProfileActivity.class));
+                    return true;
+                }
+                return false;
+            }
+        });
+        // Initialize views
+        initializeViews();
+
+        // Initialize OkHttpClient
+        client = new OkHttpClient();
 
         // Initialize RecyclerView
-        recyclerView = findViewById(R.id.recyclerView); // Your RecyclerView ID
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        foodItemsList = new ArrayList<>();
+        itemRecyclerView = findViewById(R.id.itemRecyclerView);
+        itemRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        itemAdapter = new ItemDetailsAdpter(this, foodItemsList);
+        itemRecyclerView.setAdapter(itemAdapter);
 
-        // Initialize item list and adapter
-        itemList = new ArrayList<>();
-        adapter = new ItemDetailsAdpter(this, itemList);
-        recyclerView.setAdapter(adapter);
+        // Get the Id_Demandes from the intent
+        String orderIdStr = getIntent().getStringExtra("Id_Demandes");
+        int orderId;
 
-        // Populate the item list
-        populateItems();
-
-        DeliveryDone.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(OrderDetailsActivity.this, OrderInDeliveryActivity.class);
-                startActivity(intent);
-            }
-        });
-
-
-
-        callCusBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                makePhoneCall(customerPhoneNumber);
-            }
-        });
-
-
-
-        directionCusBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                openMapForDirections(36.7525000, 3.0420000, customerAddress);  // Use actual coordinates for the customer
-            }
-        });
-    }
-
-    private void makePhoneCall(String phoneNumber) {
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CALL_PHONE}, REQUEST_CALL_PERMISSION);
-        } else {
-            startPhoneCall(phoneNumber);
-        }
-    }
-
-    private void startPhoneCall(String phoneNumber) {
-        Intent callIntent = new Intent(Intent.ACTION_CALL);
-        callIntent.setData(Uri.parse("tel:" + phoneNumber));
+        // Ensure the order ID is valid
         try {
-            startActivity(callIntent);
-        } catch (SecurityException e) {
-            Toast.makeText(this, "Permission denied to make a call", Toast.LENGTH_SHORT).show();
+            orderId = Integer.parseInt(orderIdStr);
+        } catch (NumberFormatException e) {
+            showError("Invalid order ID.");
+            return;
         }
+
+        fetchOrderDetails(orderId);
+
+        if(orderId == 6){
+            delivery_order_done.setVisibility(View.GONE);
+        }
+        // Set onClick listener for the button
+        delivery_order_done.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                updateOrderStatus(orderId);
+            }
+        });
     }
 
-    private void openMapForDirections(double latitude, double longitude, String address) {
-        // Create a URI to pass to the Google Maps app with the directions
-        String uri = String.format("google.navigation:q=%f,%f(%s)", latitude, longitude, Uri.encode(address));
-        Uri gmmIntentUri = Uri.parse(uri);
-
-        Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
-        mapIntent.setPackage("com.google.android.apps.maps");
-
-        if (mapIntent.resolveActivity(getPackageManager()) != null) {
-            startActivity(mapIntent);
-        } else {
-            Toast.makeText(this, "Maps application is not available", Toast.LENGTH_SHORT).show();
-        }
+    private void initializeViews() {
+        additionalInfoMagView = findViewById(R.id.additional_information_text_mandel);
+        restaurantNameView = findViewById(R.id.resnameinfodet);
+        restaurantLocationView = findViewById(R.id.placeresinfodet);
+        restaurantStatusView = findViewById(R.id.statusinfodet);
+        restaurantRatingView = findViewById(R.id.valtvinfodet);
+        CustomerNameView = findViewById(R.id.name_user_det);
+        number_items = findViewById(R.id.number_items);
+        delivery_order_done = findViewById(R.id.delivery_order_done); // Initialize here
     }
 
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if (requestCode == REQUEST_CALL_PERMISSION) {
-            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                // Handle phone call after permission is granted
-                Toast.makeText(this, "Permission granted to make a call", Toast.LENGTH_SHORT).show();
+    private void fetchOrderDetails(int orderId) {
+        JSONObject jsonParams = new JSONObject();
+        try {
+            jsonParams.put("Id_Demandes", orderId);
+        } catch (JSONException e) {
+            e.printStackTrace();
+            showError("Failed to create request parameters.");
+            return;
+        }
+
+        Request request = new Request.Builder()
+                .url("http://192.168.1.33/fissa/Man_Delivery_Food/Details_order.php")
+                .post(RequestBody.create(MediaType.parse("application/json; charset=utf-8"), jsonParams.toString()))
+                .build();
+
+        client.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                Log.e(TAG, "Network request failed: " + e.getMessage());
+                runOnUiThread(() -> showError("Failed to fetch order details."));
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                if (response.isSuccessful()) {
+                    final String jsonResponse = response.body().string();
+                    Log.d(TAG, "Response from server: " + jsonResponse);
+                    runOnUiThread(() -> handleResponse(jsonResponse));
+                } else {
+                    Log.e(TAG, "Server error: " + response.message());
+                    runOnUiThread(() -> showError("Error: " + response.message()));
+                }
+            }
+        });
+    }
+
+    private void handleResponse(String jsonResponse) {
+        try {
+            JSONObject jsonObject = new JSONObject(jsonResponse);
+            if (!jsonObject.has("error")) {
+                JSONObject order = jsonObject.getJSONObject("order");
+                updateOrderDetails(order);
             } else {
-                Toast.makeText(this, "Permission denied to make a call", Toast.LENGTH_SHORT).show();
+                String errorMessage = jsonObject.optString("error", "Unknown error occurred.");
+                showError("Error fetching order data: " + errorMessage);
+            }
+        } catch (JSONException e) {
+            Log.e(TAG, "Failed to parse response: " + e.getMessage());
+            showError("Failed to parse server response.");
+        }
+    }
+
+    private void updateOrderDetails(JSONObject order) throws JSONException {
+        // Update TextViews with the fetched order and restaurant details
+        additionalInfoMagView.setText(order.optString("restaurantMessage"));
+        restaurantNameView.setText(order.optString("restaurant_name"));
+        restaurantLocationView.setText(order.optString("restaurant_address"));
+        restaurantStatusView.setText(order.optString("restaurant_status"));
+        restaurantRatingView.setText(order.optString("restaurant_eval"));
+        CustomerNameView.setText(order.optString("customerName"));
+
+        // If the order contains items, display them in a list
+        if (order.has("items")) {
+            JSONArray items = order.getJSONArray("items");
+            if (items.length() > 0) { // Check if items array is not empty
+                foodItemsList.clear(); // Clear existing items
+                int totalItemCount = 0;
+                for (int i = 0; i < items.length(); i++) {
+                    JSONObject item = items.getJSONObject(i);
+                    String itemName = item.optString("itemName");
+                    double itemPrice = item.optDouble("itemPrice");
+                    int itemQuantity = item.optInt("itemQuantity");
+                    totalItemCount += itemQuantity; // Update the total item count
+                    foodItemsList.add(new FoodItem(itemName, itemPrice, itemQuantity));
+                }
+                number_items.setText("عدد العناصر : " + totalItemCount);
+                itemAdapter.notifyDataSetChanged(); // Refresh the adapter to display updated items
+            } else {
+                number_items.setText("عدد العناصر : 0");
             }
         }
     }
 
-    private void populateItems() {
-        itemList.add(new FoodItem("Item 1", 10000.00,10, R.drawable.pizza));
-        itemList.add(new FoodItem("Item 2", 100.00,10, R.drawable.pizza));
-        itemList.add(new FoodItem("Item 3", 10.00,10, R.drawable.pizza));
-        // Add more items as needed
+    private void showError(String message) {
+        Log.e(TAG, message);
+        // Implement error display logic (e.g., Toast or Snackbar)
+        Toast.makeText(this, "حدث خطأ: " + message, Toast.LENGTH_LONG).show();
+    }
 
-        // Notify adapter of data change
-        adapter.notifyDataSetChanged();
+    // Method to update order status
+    private void updateOrderStatus(int orderId) {
+        JSONObject jsonParams = new JSONObject();
+        try {
+            jsonParams.put("Id_Demandes", orderId);
+            jsonParams.put("Id_Statut_Commande", 6); // Set new status
+        } catch (JSONException e) {
+            e.printStackTrace();
+            showError("فشل في إنشاء معلمات الطلب.");
+            return;
+        }
+
+        Request request = new Request.Builder()
+                .url("http://192.168.1.33/fissa/Man_Delivery_Food/Update_Status_cmd.php")
+                .post(RequestBody.create(MediaType.parse("application/json; charset=utf-8"), jsonParams.toString()))
+                .build();
+
+        client.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                Log.e(TAG, "Failed to update order status: " + e.getMessage());
+                runOnUiThread(() -> showError("فشل في تحديث حالة الطلب."));
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                if (response.isSuccessful()) {
+                    final String jsonResponse = response.body().string();
+                    Log.d(TAG, "Response from server: " + jsonResponse);
+                    runOnUiThread(() -> handleUpdateResponse(jsonResponse));
+                } else {
+                    Log.e(TAG, "Server error: " + response.message());
+                    runOnUiThread(() -> showError("Error: " + response.message()));
+                }
+            }
+        });
+    }
+
+    private void handleUpdateResponse(String jsonResponse) {
+        try {
+            JSONObject jsonObject = new JSONObject(jsonResponse);
+            if (!jsonObject.has("error")) {
+                Toast.makeText(this, "تم تحديث حالة الطلب بنجاح.", Toast.LENGTH_SHORT).show();
+                finish(); // Close the activity after successful update
+            } else {
+                String errorMessage = jsonObject.optString("error", "Unknown error occurred.");
+                showError("خطأ في تحديث حالة الطلب: " + errorMessage);
+            }
+        } catch (JSONException e) {
+            Log.e(TAG, "Failed to parse update response: " + e.getMessage());
+            showError("فشل في تحليل الاستجابة من الخادم.");
+        }
     }
 }

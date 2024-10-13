@@ -63,7 +63,7 @@
             android:orientation="horizontal">
 
             <Button
-                android:id="@+id/cancel_order"
+                android:id="@+id/Receive_Done_order"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -101,47 +101,6 @@
             android:orientation="vertical"
             android:visibility="gone">
 
-            <LinearLayout
-                android:id="@+id/otp_fields"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginTop="20dp"
-                android:orientation="horizontal">
-            <EditText
-                android:id="@+id/inputcode2"
-                android:layout_width="60dp"
-                android:layout_height="80dp"
-                android:layout_marginStart="4dp"
-                android:gravity="center"
-                android:imeOptions="actionPrevious"
-                android:importantForAutofill="no"
-                android:inputType="number"
-                android:maxLength="1"
-                android:hint="."
-                android:fontFamily="@font/hacen_beirut_bight"
-                android:textColor="@color/black"
-                android:textSize="24sp"
-                android:textStyle="bold"
-                tools:ignore="LabelFor" />
-
-            <EditText
-                android:id="@+id/inputcode1"
-                android:layout_width="60dp"
-                android:layout_height="80dp"
-                android:layout_marginStart="4dp"
-                android:gravity="center"
-                android:imeOptions="actionPrevious"
-                android:importantForAutofill="no"
-                android:inputType="number"
-                android:maxLength="1"
-                android:hint="."
-                android:fontFamily="@font/hacen_beirut_bight"
-                android:textColor="@color/black"
-                android:textSize="24sp"
-                android:textStyle="bold"
-                tools:ignore="LabelFor" />
-            </LinearLayout>
 
             <Button
                 android:id="@+id/submit_otp"

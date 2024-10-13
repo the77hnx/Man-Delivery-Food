@@ -30,15 +30,15 @@
         android:paddingBottom="14dp" />
 
     <EditText
-        android:id="@+id/etnumberlogin"
+        android:id="@+id/etemaillogin"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="10dp"
         android:background="@drawable/field_border"
-        android:hint="الهاتف"
+        android:hint="البريد الالكتروني"
         android:gravity="right"
         android:fontFamily="@font/hacen_beirut_bight"
-        android:inputType="number"
+        android:inputType="textEmailAddress"
         android:minHeight="48dp"
         android:padding="10dp" />
 

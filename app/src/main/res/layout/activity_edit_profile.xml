@@ -60,7 +60,7 @@
                 android:gravity="center_horizontal"
                 android:paddingStart="15dp"
                 android:paddingBottom="6dp"
-                android:text="معلوماتي"
+                android:text="معلومات المطعم"
                 android:textColor="@color/black"
                 android:textSize="25sp"
                 android:textStyle="bold" />
@@ -116,14 +116,14 @@
                         android:textSize="18sp" />
 
                     <EditText
-                        android:id="@+id/etnumberedit"
+                        android:id="@+id/etNameeditpage"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:background="@drawable/field_border"
                         android:fontFamily="@font/hacen_beirut_bight"
                         android:gravity="right"
-                        android:hint="الهاتف"
+                        android:hint="اسم المستخدم"
                         android:inputType="textPersonName"
                         android:minHeight="48dp"
                         android:padding="10dp"
@@ -147,26 +147,26 @@
                     android:orientation="horizontal">
 
                     <TextView
-                        android:id="@+id/numbertv"
+                        android:id="@+id/descriptiontv"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:fontFamily="@font/hacen_beirut_bight"
                         android:padding="8dp"
-                        android:text="رقم الهاتف"
+                        android:text="اسم المركبة"
                         android:textColor="@color/black"
                         android:textSize="18sp" />
 
                     <EditText
-                        android:id="@+id/etNameedit"
+                        android:id="@+id/etDescription"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:background="@drawable/field_border"
                         android:fontFamily="@font/hacen_beirut_bight"
                         android:gravity="right"
-                        android:hint=""
-                        android:inputType="number"
+                        android:hint="اسم المركبة"
+                        android:inputType="textMultiLine"
                         android:minHeight="48dp"
                         android:padding="10dp"
                         android:visibility="gone" />
@@ -181,9 +181,190 @@
                         tools:ignore="TouchTargetSizeCheck" />
                 </LinearLayout>
 
+                <!-- Description -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
+                    android:orientation="horizontal">
 
+                    <TextView
+                        android:id="@+id/telrestv"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/hacen_beirut_bight"
+                        android:padding="8dp"
+                        android:text="رقم الهاتف"
+                        android:textColor="@color/black"
+                        android:textSize="18sp" />
+
+                    <EditText
+                        android:id="@+id/etNumber"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:background="@drawable/field_border"
+                        android:fontFamily="@font/hacen_beirut_bight"
+                        android:gravity="right"
+                        android:hint="رقم الهاتف"
+                        android:inputType="phone"
+                        android:maxLength="10"
+                        android:minHeight="48dp"
+                        android:padding="10dp"
+                        android:visibility="gone" />
+
+                    <Button
+                        android:id="@+id/editbtn4"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:background="@drawable/ic_edit"
+                        android:contentDescription="btn2"
+                        android:padding="10dp"
+                        tools:ignore="TouchTargetSizeCheck" />
+                </LinearLayout>
+
+                <!-- Description -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/etpasswordedittv"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/hacen_beirut_bight"
+                        android:padding="8dp"
+                        android:text="كلمة المرور"
+                        android:textColor="@color/black"
+                        android:textSize="18sp" />
+
+                    <EditText
+                        android:id="@+id/etpasswordedit"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:background="@drawable/field_border"
+                        android:fontFamily="@font/hacen_beirut_bight"
+                        android:gravity="right"
+                        android:hint="كلمة المرور"
+                        android:inputType="textPassword"
+                        android:minHeight="48dp"
+                        android:padding="10dp"
+                        android:visibility="gone" />
+
+                    <Button
+                        android:id="@+id/editbtn5"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:background="@drawable/ic_edit"
+                        android:contentDescription="btn2"
+                        android:padding="10dp"
+                        tools:ignore="TouchTargetSizeCheck" />
+                </LinearLayout>
+                <!-- Description -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/repasswordrestv"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/hacen_beirut_bight"
+                        android:padding="8dp"
+                        android:text="اعادة كلمة المرور"
+                        android:textColor="@color/black"
+                        android:textSize="18sp" />
+
+                    <EditText
+                        android:id="@+id/etrepasswordedit"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:background="@drawable/field_border"
+                        android:fontFamily="@font/hacen_beirut_bight"
+                        android:gravity="right"
+                        android:hint="اعادة كلمة المرور"
+                        android:inputType="textPassword"
+                        android:minHeight="48dp"
+                        android:padding="10dp"
+                        android:visibility="gone" />
+
+                    <Button
+                        android:id="@+id/editbtn6"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:background="@drawable/ic_edit"
+                        android:contentDescription="btn2"
+                        android:padding="10dp"
+                        tools:ignore="TouchTargetSizeCheck" />
+                </LinearLayout>
+
+                <!-- Address -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/addresstvwritten"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/hacen_beirut_bight"
+                        android:padding="8dp"
+                        android:text="رقم المركبة"
+                        android:textColor="@color/black"
+                        android:textSize="18sp" />
+
+                    <EditText
+                        android:id="@+id/addressEditText"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:background="@drawable/field_border"
+                        android:fontFamily="@font/hacen_beirut_bight"
+                        android:gravity="right"
+                        android:hint="رقم المركبة"
+                        android:inputType="text"
+                        android:minHeight="48dp"
+                        android:padding="10dp"
+                        android:visibility="gone" />
+
+                    <Button
+                        android:id="@+id/editbtn3"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:background="@drawable/ic_edit"
+                        android:contentDescription="btn3"
+                        android:padding="10dp"
+                        tools:ignore="TouchTargetSizeCheck" />
+                </LinearLayout>
             </LinearLayout>
 
+            <TextView
+                android:id="@+id/editGPStext"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:background="@drawable/uploadimage_border"
+                android:clickable="true"
+                android:focusable="true"
+                android:gravity="center"
+                android:minHeight="48dp"
+                android:padding="10dp"
+                android:text="تعديل الموقع GPS"
+                android:textColor="@color/black"
+                android:textSize="18sp"
+                android:textStyle="bold" />
 
             <Button
                 android:id="@+id/saveeditbtn"

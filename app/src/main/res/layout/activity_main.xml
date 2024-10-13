@@ -46,7 +46,7 @@
                     android:textStyle="bold" />
 
                 <TextView
-                    android:id="@+id/basketmain"
+                    android:id="@+id/nameDel"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
@@ -62,7 +62,35 @@
             </LinearLayout>
 
 
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingTop="10dp"
+                android:paddingLeft="10dp"
+                android:layout_gravity="center_horizontal"
+                android:orientation="horizontal">
 
+                <TextView
+                    android:id="@+id/status_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginEnd="10dp"
+                    android:fontFamily="@font/hacen_beirut_bight"
+                    android:text="غير متاح"
+                    android:textColor="@color/red"
+                    android:textSize="26sp"
+                    android:textStyle="bold" />
+
+                <Switch
+                    android:id="@+id/offer_switch_main"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center"
+                    android:textOff="OFF"
+                    android:textOn="ON"
+                    tools:ignore="TouchTargetSizeCheck" />
+            </LinearLayout>
             <!--            <com.google.android.material.switchmaterial.SwitchMaterial-->
             <!--                android:id="@+id/Status_switch_main"-->
             <!--                android:layout_width="0dp"-->
@@ -103,12 +131,204 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:padding="10dp"
-            app:layout_constraintBottom_toTopOf="@id/bottomNavigationView_sm"
+            app:layout_constraintBottom_toTopOf="@id/bottomNavigationView_ma"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/toolbar">
 
 
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="8dp"
+                android:layoutDirection="rtl"
+                app:cardCornerRadius="8dp"
+                app:cardElevation="4dp">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/profileordercolor"
+                    android:orientation="horizontal"
+                    android:padding="8dp">
+
+                    <ImageView
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:layout_marginLeft="10dp"
+                        android:src="@drawable/profile" />
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:orientation="horizontal">
+                            <TextView
+                                android:id="@+id/customer_name_main"
+                                android:layout_width="0dp"
+                                android:layout_weight="1"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="@font/hacen_beirut_bight"
+                                android:text="أحمد علي"
+                                android:gravity="right"
+                                android:textColor="@color/black"
+                                android:textSize="16sp"
+                                android:textStyle="bold" />
+                            <TextView
+                                android:id="@+id/pay_meth"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="@font/hacen_beirut_bight"
+                                android:text="طريقة الدفع: كاش"
+                                android:textColor="@android:color/black"
+                                android:textSize="16sp" />
+                        </LinearLayout>
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:orientation="horizontal">
+                            <TextView
+                                android:id="@+id/price_del_main"
+                                android:layout_width="0dp"
+                                android:layout_weight="1"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="@font/hacen_beirut_bight"
+                                android:text="سعر التوصيل: 200 دج"
+                                android:textColor="@color/black"
+                                android:textSize="16sp"
+                                />
+                            <TextView
+                                android:id="@+id/allprice_main"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="@font/hacen_beirut_bight"
+                                android:text="سعر الطلبية: 2500 دج"
+                                android:textColor="@color/black"
+                                android:textSize="16sp" />
+                        </LinearLayout>
+                        <TextView
+                            android:id="@+id/order_id_main"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/hacen_beirut_bight"
+                            android:text="#1324"
+                            android:textColor="@color/black"
+                            android:textSize="16sp"
+                            android:textStyle="bold" />
+                    </LinearLayout>
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="start"
+                        android:orientation="vertical"/>
+                </LinearLayout>
+                <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layoutDirection="rtl"
+                    android:orientation="vertical"
+                    android:padding="8dp">
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:paddingBottom="8dp">
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="4dp"
+                            android:orientation="horizontal">
+                            <TextView
+                                android:id="@+id/item_name_new"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="@font/hacen_beirut_bight"
+                                android:text="مكان المطعم :"
+                                android:textColor="@color/black"
+                                android:paddingLeft="10dp"
+                                android:textSize="16sp" />
+
+                            <TextView
+                                android:id="@+id/Restaurant_location"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:fontFamily="@font/hacen_beirut_bight"
+                                android:text="لبامة البياضة"
+                                android:gravity="right"
+                                android:textColor="@color/black"
+                                android:textSize="15sp"
+                                />
+                        </LinearLayout>
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="4dp"
+                            android:orientation="horizontal" >
+                            <TextView
+                                android:id="@+id/order_message_new"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="@font/hacen_beirut_bight"
+                                android:text="مكان الزبون :"
+                                android:paddingLeft="10dp"
+                                android:textColor="@color/black"
+                                android:textSize="16sp" />
+                            <TextView
+                                android:id="@+id/customer_location"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:fontFamily="@font/hacen_beirut_bight"
+                                android:text="حي المستقبل البياضة"
+                                android:gravity="right"
+                                android:textColor="@color/black"
+                                android:textSize="15sp" />
+                        </LinearLayout>
+                    </LinearLayout>
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="60dp"
+                    android:orientation="horizontal"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp">
+                    <Button
+                        android:id="@+id/detailed_order_btn"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:layout_marginRight="1dp"
+                        android:layout_marginLeft="1dp"
+                        android:background="@drawable/tomato_padding_button"
+                        android:fontFamily="@font/hacen_beirut_bight"
+                        android:text="التفاصيل"
+                        android:textColor="@color/tomato_red"
+                        android:textSize="20dp" />
+
+                    <Button
+                        android:id="@+id/direction_order_btn"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:layout_weight="1"
+                        android:background="@drawable/accept_button"
+                        android:fontFamily="@font/hacen_beirut_bight"
+                        android:text="الاتجاه"
+                        android:textColor="@color/white"
+                        android:textSize="20dp" />
+                </LinearLayout>
+            </LinearLayout>
+            </androidx.cardview.widget.CardView>
             <TextView
                 android:id="@+id/wallettitle"
                 android:layout_width="wrap_content"
@@ -385,7 +605,7 @@
                                 android:textSize="30sp" />
 
                             <TextView
-                                android:id="@+id/item_name3"
+                                android:id="@+id/Accepted_orders"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:fontFamily="@font/hacen_beirut_bight"
@@ -453,7 +673,7 @@
                                 android:textSize="30sp" />
 
                             <TextView
-                                android:id="@+id/item_name2"
+                                android:id="@+id/Rejected_orders"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:fontFamily="@font/hacen_beirut_bight"
@@ -523,7 +743,7 @@
                             android:textSize="30sp" />
 
                         <TextView
-                            android:id="@+id/item_name5"
+                            android:id="@+id/daily_orders"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/hacen_beirut_bight"
@@ -589,7 +809,7 @@
                             android:textSize="30sp" />
 
                         <TextView
-                            android:id="@+id/item_name6"
+                            android:id="@+id/Monthly_orders"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/hacen_beirut_bight"
