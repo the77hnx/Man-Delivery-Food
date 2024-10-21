@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.man_delivery_food.Adapter.OrderAdapter;
+import com.example.man_delivery_food.DBHelper.DBHelper;
 import com.example.man_delivery_food.Model.Order;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
@@ -27,10 +28,12 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import okhttp3.FormBody;
 import okhttp3.Request;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.OkHttpClient;
+import okhttp3.RequestBody;
 import okhttp3.Response;
 
 public class OrderHistoryActivity extends AppCompatActivity {
@@ -38,6 +41,8 @@ public class OrderHistoryActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
     private OrderAdapter orderAdapter;
     private List<Order> orderList;
+    private OkHttpClient client;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,6 +77,7 @@ public class OrderHistoryActivity extends AppCompatActivity {
         // Initialize RecyclerView
         recyclerView = findViewById(R.id.recycler_view_orders);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        client = new OkHttpClient();
 
         // Initialize the orderList to avoid NullPointerException
         orderList = new ArrayList<>();
@@ -85,8 +91,12 @@ public class OrderHistoryActivity extends AppCompatActivity {
         });
         recyclerView.setAdapter(orderAdapter);
 
+        DBHelper dbHelper = new DBHelper(this);
+        String userId = dbHelper.getUserId();
+        Log.d("user id = ", userId) ;
+
         // Fetch orders from the server
-        fetchOrders();
+        fetchOrders(userId);
 
 
 
@@ -98,15 +108,22 @@ public class OrderHistoryActivity extends AppCompatActivity {
         });
     }
 
-    private void fetchOrders() {
+    private void fetchOrders(String userId) {
         OkHttpClient client = new OkHttpClient();
 
         // The URL for your PHP script
         String url = "http://192.168.1.33/fissa/Man_Delivery_Food/Order_History.php";
 
-        Request request = new Request.Builder()
-                .url(url)
+        RequestBody postUserID = new FormBody.Builder()
+                .add("user_id", userId) // Use 'user_id' instead of 'userId'
                 .build();
+
+        okhttp3.Request request = new okhttp3.Request.Builder()
+                .url(url)
+                .post(postUserID)
+                .build();
+
+        Log.d("request", String.valueOf(request));
 
         client.newCall(request).enqueue(new Callback() {
             @Override

@@ -21,6 +21,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.Volley;
+import com.example.man_delivery_food.DBHelper.DBHelper;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import org.json.JSONArray;
@@ -33,6 +34,11 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.net.URLEncoder;
+import java.util.HashMap;
+import java.util.Map;
+
+import okhttp3.OkHttpClient;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -47,7 +53,7 @@ public class MainActivity extends AppCompatActivity {
             Rejected_orders, Accepted_orders, Daily_orders, Monthly_orders,Evaluation;
     private Button Detailed_order_btn, Direction_order_btn;
     private Switch offerSwitch;
-
+    private OkHttpClient client;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,20 +81,28 @@ public class MainActivity extends AppCompatActivity {
         Monthly_orders = findViewById(R.id.Monthly_orders);
         Evaluation = findViewById(R.id.item_name4);
         offerSwitch = findViewById(R.id.offer_switch_main);
+        client = new OkHttpClient();
+
+        // Load the saved offer switch state
+        SharedPreferences preferences = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+        boolean offerStatus = preferences.getBoolean(OFFER_STATUS_KEY, false);
+        offerSwitch.setChecked(offerStatus);
 
         // Set initial state of the basket TextView
         updateBasketText(offerSwitch.isChecked());
-
+        DBHelper dbHelper = new DBHelper(this);
+        String userId = dbHelper.getUserId();
+        Log.d("user id = ", userId) ;
         // Fetch store data from the server
-        fetchDataFromServer();
-        showStoreStatus(); // Call to fetch and display current store status
+        fetchDataFromServer(userId);
+        showStoreStatus(userId); // Call to fetch and display current store status
 
 
 // Set up listener for the Switch
         offerSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
             updateBasketText(isChecked);
             saveOfferSwitchState(isChecked); // Save state when it changes
-            updateStoreStatus(isChecked);    // Update status on the server
+            updateStoreStatus(isChecked, userId);    // Update status on the server
         });
 
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavigationView_ma);
@@ -146,55 +160,64 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    public void fetchDataFromServer() {
+    public void fetchDataFromServer(String userId) {
         String url = "http://192.168.1.33/fissa/Man_Delivery_Food/Fetch_Data_Man_Del.php"; // Replace with your PHP script URL
 
         RequestQueue requestQueue = Volley.newRequestQueue(this);
 
-        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(
-                Request.Method.GET,
-                url,
-                null,
-                new Response.Listener<JSONArray>() {
-                    @Override
-                    public void onResponse(JSONArray response) {
-                        try {
-                            // Assuming you receive a single item in the array
-                            JSONObject data = response.getJSONObject(0);
-                            Log.d("data : ", String.valueOf(data));
-                            // Set data to TextViews
-                            Customername.setText( data.getString("Customer_Name"));
-                            NameDel.setText(data.getString("Livreur_name"));
-                            Status_tv.setText(data.getString("Statut_Livreur"));
-                            Allprice_main.setText("سعر الطلبية : " + data.getString("Order_Price") + "دج");
-                            Price_del.setText("سعر التوصيل : " + data.getString("Delivery_Price") + "دج");
-                            Order_id.setText("رقم الطلب : " + data.getString("Order_ID"));
-                            Restaurant_location.setText(data.getString("Restaurant_Location"));
-                            Customer_location.setText(data.getString("Customer_Location"));
-                            Valwallet.setText(data.getString("wallet_value"));
-                            Valmonth.setText(data.getString("wallet_monthly_value"));
-                            Valweek.setText(data.getString("wallet_weekly_value"));
-                            Valtoday.setText(data.getString("wallet_daily_value"));
-                            Rejected_orders.setText(data.getString("cancelled_orders"));
-                            Accepted_orders.setText(data.getString("accepted_orders"));
-                            Daily_orders.setText(data.getString("todays_orders"));
-                            Monthly_orders.setText(data.getString("monthly_orders"));
-                            Evaluation.setText(data.getString("Evaluation"));
+        // Create a JSON object with the userId
+        JSONObject params = new JSONObject();
+        try {
+            params.put("user_id", userId);
+        } catch (JSONException e) {
+            e.printStackTrace();
+            Log.e("JSON Error", e.getMessage());
+        }
 
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                            Log.e("Error : ", e.getMessage());
-                        }
+        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(
+                Request.Method.POST, // Change to POST
+                url,
+                params.names(), // Pass the JSON object as the request body
+                response -> {
+                    try {
+                        // Assuming you receive a single item in the array
+                        JSONObject data = response.getJSONObject(0);
+                        Log.d("data : ", String.valueOf(data));
+                        // Set data to TextViews
+                        Customername.setText(data.getString("Customer_Name"));
+                        NameDel.setText(data.getString("Livreur_name"));
+                        Status_tv.setText(data.getString("Statut_Livreur"));
+                        Allprice_main.setText("سعر الطلبية : " + data.getString("Order_Price") + "دج");
+                        Price_del.setText("سعر التوصيل : " + data.getString("Delivery_Price") + "دج");
+                        Order_id.setText("رقم الطلب : " + data.getString("Order_ID"));
+                        Restaurant_location.setText(data.getString("Restaurant_Location"));
+                        Customer_location.setText(data.getString("Customer_Location"));
+                        Valwallet.setText(data.getString("wallet_value"));
+                        Valmonth.setText(data.getString("wallet_monthly_value"));
+                        Valweek.setText(data.getString("wallet_weekly_value"));
+                        Valtoday.setText(data.getString("wallet_daily_value"));
+                        Rejected_orders.setText(data.getString("cancelled_orders"));
+                        Accepted_orders.setText(data.getString("accepted_orders"));
+                        Daily_orders.setText(data.getString("todays_orders"));
+                        Monthly_orders.setText(data.getString("monthly_orders"));
+                        Evaluation.setText(data.getString("Evaluation"));
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                        Log.e("Error : ", e.getMessage());
                     }
                 },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        error.printStackTrace();
-                        Log.e("Erro Voley : ", String.valueOf(error));
-                    }
+                error -> {
+                    error.printStackTrace();
+                    Log.e("Volley Error : ", String.valueOf(error));
                 }
-        );
+        ) {
+            @Override
+            public Map<String, String> getHeaders() {
+                Map<String, String> headers = new HashMap<>();
+                headers.put("Content-Type", "application/json"); // Set content type
+                return headers;
+            }
+        };
 
         // Add request to the request queue
         requestQueue.add(jsonArrayRequest);
@@ -206,7 +229,7 @@ public class MainActivity extends AppCompatActivity {
         editor.putBoolean(OFFER_STATUS_KEY, isChecked);
         editor.apply();
     }
-    private void showStoreStatus() {
+    private void showStoreStatus(String userId) {
         new AsyncTask<Void, Void, String>() {
             @Override
             protected String doInBackground(Void... voids) {
@@ -216,6 +239,16 @@ public class MainActivity extends AppCompatActivity {
                     connection.setRequestMethod("GET");
                     connection.setDoInput(true);
 
+                    // Prepare the POST data
+                    String postData = "user_id=" + URLEncoder.encode(userId, "UTF-8");
+
+                    // Send the POST data
+                    OutputStreamWriter writer = new OutputStreamWriter(connection.getOutputStream());
+                    writer.write(postData);
+                    writer.flush();
+                    writer.close();
+
+                    // Read the response
                     BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
                     StringBuilder result = new StringBuilder();
                     String line;
@@ -249,7 +282,7 @@ public class MainActivity extends AppCompatActivity {
         }.execute();
     }
 
-    private void updateStoreStatus(boolean isOpen) {
+    private void updateStoreStatus(boolean isOpen, String userId) {
         new AsyncTask<Boolean, Void, Boolean>() {
             @Override
             protected Boolean doInBackground(Boolean... params) {
@@ -258,11 +291,14 @@ public class MainActivity extends AppCompatActivity {
                     HttpURLConnection connection = (HttpURLConnection) url.openConnection();
                     connection.setRequestMethod("POST");
                     connection.setDoOutput(true);
+                    connection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
 
-                    String data = "statut_livreur=" + (params[0] ? "متاح" : "غير متاح");
+                    String statutLivreur = params[0] ? "متاح" : "غير متاح";
+                    String postData = "user_id=" + URLEncoder.encode(userId, "UTF-8") +
+                            "&statut_magasin=" + URLEncoder.encode(statutLivreur, "UTF-8");
 
                     BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(connection.getOutputStream()));
-                    writer.write(data);
+                    writer.write(postData);
                     writer.flush();
                     writer.close();
 
@@ -311,4 +347,5 @@ public class MainActivity extends AppCompatActivity {
             Status_tv.setTextColor(getResources().getColor(R.color.red));
         }
     }
+    
 }
