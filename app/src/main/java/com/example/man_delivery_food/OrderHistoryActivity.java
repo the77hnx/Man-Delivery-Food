@@ -112,7 +112,7 @@ public class OrderHistoryActivity extends AppCompatActivity {
         OkHttpClient client = new OkHttpClient();
 
         // The URL for your PHP script
-        String url = "http://192.168.1.33/fissa/Man_Delivery_Food/Order_History.php";
+        String url = "https://www.fissadelivery.com/fissa/Man_Delivery_Food/Order_History.php";
 
         RequestBody postUserID = new FormBody.Builder()
                 .add("user_id", userId) // Use 'user_id' instead of 'userId'

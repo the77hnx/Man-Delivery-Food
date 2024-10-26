@@ -231,7 +231,7 @@ public class SignNewManActivity extends AppCompatActivity {
         RequestBody requestBody = builder.build();
 
         Request request = new Request.Builder()
-                .url("http://192.168.1.35/fissa/Man_Delivery_Food/Signup_Man_Del.php")
+                .url("https://www.fissadelivery.com/fissa/Man_Delivery_Food/Signup_Man_Del.php")
                 .post(requestBody)
                 .build();
 

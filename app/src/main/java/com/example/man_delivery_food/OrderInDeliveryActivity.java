@@ -144,7 +144,7 @@ public class OrderInDeliveryActivity extends AppCompatActivity {
         RequestBody body = RequestBody.create(json, MediaType.parse("application/json"));
 
         Request request = new Request.Builder()
-                .url("http://192.168.1.33/fissa/Man_Delivery_Food/Update_Status_cmd.php")
+                .url("https://www.fissadelivery.com/fissa/Man_Delivery_Food/Update_Status_cmd.php")
                 .post(body)
                 .build();
 

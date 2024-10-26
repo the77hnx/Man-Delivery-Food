@@ -44,8 +44,8 @@ public class MainActivity extends AppCompatActivity {
 
     private static final String PREFS_NAME = "MyPrefs";
     private static final String OFFER_STATUS_KEY = "offer_status";
-    private static final String fetchStoreDataURL = "http://192.168.1.33/fissa/Man_Delivery_Food/Fetch_Data_Man_Del.php";
-    private static final String updateStoreStatusURL = "http://192.168.1.33/fissa/Man_Delivery_Food/Status_Livreur.php";
+    private static final String fetchStoreDataURL = "https://www.fissadelivery.com/fissa/Man_Delivery_Food/Fetch_Data_Man_Del.php";
+    private static final String updateStoreStatusURL = "https://www.fissadelivery.com/fissa/Man_Delivery_Food/Status_Livreur.php";
 
 
     private TextView Customername, NameDel, Status_tv, Allprice_main, Price_del, Order_id,
@@ -161,7 +161,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void fetchDataFromServer(String userId) {
-        String url = "http://192.168.1.33/fissa/Man_Delivery_Food/Fetch_Data_Man_Del.php"; // Replace with your PHP script URL
+        String url = "https://www.fissadelivery.com/fissa/Man_Delivery_Food/Fetch_Data_Man_Del.php"; // Replace with your PHP script URL
 
         RequestQueue requestQueue = Volley.newRequestQueue(this);
 

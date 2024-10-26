@@ -279,7 +279,7 @@ public class EditProfileActivity extends AppCompatActivity {
         Log.d("EditProfileActivity", "Coordinates: " + coordinates);
 
         // Perform network request here
-        String url = "http://192.168.1.33/fissa/Man_Delivery_Food/Update_Profile.php"; // Update with your PHP endpoint
+        String url = "https://www.fissadelivery.com/fissa/Man_Delivery_Food/Update_Profile.php"; // Update with your PHP endpoint
 
         StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
                 response -> {

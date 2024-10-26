@@ -142,7 +142,7 @@ public class OrderDetailsActivity extends AppCompatActivity {
         }
 
         Request request = new Request.Builder()
-                .url("http://192.168.1.33/fissa/Man_Delivery_Food/Details_order.php")
+                .url("https://www.fissadelivery.com/fissa/Man_Delivery_Food/Details_order.php")
                 .post(RequestBody.create(MediaType.parse("application/json; charset=utf-8"), jsonParams.toString()))
                 .build();
 
@@ -233,7 +233,7 @@ public class OrderDetailsActivity extends AppCompatActivity {
         }
 
         Request request = new Request.Builder()
-                .url("http://192.168.1.33/fissa/Man_Delivery_Food/Update_Status_cmd.php")
+                .url("https://www.fissadelivery.com/fissa/Man_Delivery_Food/Update_Status_cmd.php")
                 .post(RequestBody.create(MediaType.parse("application/json; charset=utf-8"), jsonParams.toString()))
                 .build();
 
